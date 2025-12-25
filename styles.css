@@ -81,7 +81,7 @@ body{
   transition: transform 0.2s ease;
 }
 
-.modal {
+.image-viewer {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
@@ -93,11 +93,11 @@ body{
   z-index: 100;
 }
 
-.modal.hidden {
+.image-viewer.hidden {
   display: none;
 }
 
-.modal img {
+.image-viewer img {
   max-width: 80%;
   max-height: 80%;
   border-radius: 0.8rem;
