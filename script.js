@@ -63,3 +63,15 @@ prevBtn.addEventListener("click", function () {
   imagePreview.src = images[currentImageIndex].src;
 });
 
+document.addEventListener('keydown',function(e){
+  if(e.key === "Escape" && !modal.classList.contains("hidden")){
+    modal.classList.add("hidden");
+  }
+});
+
+document.addEventListener("keydown", function (e) {
+  if (modal.classList.contains("hidden")) return;
+
+  if (e.key === "ArrowRight") nextBtn.click();
+  if (e.key === "ArrowLeft") prevBtn.click();
+});
