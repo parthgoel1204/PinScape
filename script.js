@@ -25,8 +25,8 @@ if (savedTheme === "dark") {
   themeIcon.classList.add("fa-moon");
 }
 
-const images = document.querySelectorAll(".pin img");
-// const gallery = document.querySelector(".gallery");
+// const images = document.querySelectorAll(".pin img");
+const gallery = document.querySelector(".gallery");
 
 const modal = document.querySelector("#imageModal");
 const imagePreview = document.querySelector("#modalImage");
@@ -36,12 +36,14 @@ const prevBtn = document.querySelector(".nav-btn.prev");
 
 let currentImageIndex = 0;
 
-images.forEach(function (img, index) {
-  img.addEventListener("click", function () {
+gallery.addEventListener("click", function (e) {
+  if (e.target.tagName === "IMG") {
     modal.classList.remove("hidden");
-    imagePreview.src = this.src;
-    currentImageIndex = index;
-  });
+    imagePreview.src = e.target.src;
+
+    const images = Array.from(document.querySelectorAll(".pin img"));
+    currentImageIndex = images.indexOf(e.target);
+  }
 });
 
 closeBtn.addEventListener("click", function () {
@@ -49,11 +51,13 @@ closeBtn.addEventListener("click", function () {
 });
 
 nextBtn.addEventListener("click", function () {
+  const images = document.querySelectorAll(".pin img");
   currentImageIndex = (currentImageIndex + 1) % images.length;
   imagePreview.src = images[currentImageIndex].src;
 });
 
 prevBtn.addEventListener("click", function () {
+  const images = document.querySelectorAll(".pin img");
   currentImageIndex =
     (currentImageIndex - 1 + images.length) % images.length;
   imagePreview.src = images[currentImageIndex].src;
