@@ -124,4 +124,88 @@ function masonryStyle(){
   });
 }
 
-window.addEventListener("load", masonryStyle);
+// Lazy Loading
+
+const lazyImages = [
+  "https://images.unsplash.com/photo-1473225071450-1f1462d5aa92",
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+  "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+  "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6",
+  "https://images.unsplash.com/photo-1519681393784-d120267933ba",
+  "https://images.unsplash.com/photo-1518837695005-2083093ee35b",
+  "https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee",
+  "https://images.unsplash.com/photo-1470770903676-69b98201ea1c",
+  "https://images.unsplash.com/photo-1502082553048-f009c37129b9",
+  "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
+  "https://images.unsplash.com/photo-1503264116251-35a269479413",
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+  "https://images.unsplash.com/photo-1500534623283-312aade485b7",
+  "https://images.unsplash.com/photo-1482160549825-59d1b23cb208",
+  "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7",
+  "https://images.unsplash.com/photo-1599894019794-50339c9ad89c",
+  "https://images.unsplash.com/photo-1583225214464-9296029427aa",
+  "https://images.unsplash.com/photo-1543589077-47d81606c1bf"
+];
+
+let lazyIndex = 0;
+const BATCH_SIZE = 4;
+let isLoading = false;
+
+const sentinel = document.createElement("div");
+sentinel.className = "sentinel";
+gallery.appendChild(sentinel);
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting) {
+      loadMoreImages();
+    }
+  },
+  {
+    rootMargin: "200px"
+  }
+);
+
+function loadMoreImages() {
+  if (isLoading) return;
+  isLoading = true;
+
+  const fragment = document.createDocumentFragment();
+  let loadedCount = 0;
+
+  for (let i = 0; i < BATCH_SIZE; i++) {
+    if (lazyIndex >= lazyImages.length) {
+      observer.disconnect();
+      return;
+    }
+
+    const pin = document.createElement("div");
+    pin.className = "pin";
+
+    const img = document.createElement("img");
+    img.src = lazyImages[lazyIndex];
+    img.loading = "lazy";
+    img.crossOrigin = "anonymous";
+
+    pin.appendChild(img);
+    fragment.appendChild(pin);
+
+    img.addEventListener("load", function () {
+      loadedCount++;
+      pinScapeDisplay(pin);
+
+      if (loadedCount === BATCH_SIZE) {
+        isLoading = false;
+      }
+    });
+
+    lazyIndex++;
+  }
+
+  gallery.insertBefore(fragment, sentinel);
+}
+
+window.addEventListener("load", () => {
+  masonryStyle();
+  observer.observe(sentinel);
+});

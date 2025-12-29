@@ -160,3 +160,14 @@ body.dark {
 body.dark .footer {
   color: #aaa;
 }
+
+/* hide scroll bar */
+body::-webkit-scrollbar {
+  width: 0px;                   
+  background: transparent;
+}
+
+.sentinel {
+  height: 1px;
+}
+
